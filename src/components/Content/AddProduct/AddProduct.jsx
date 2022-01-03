@@ -1,7 +1,10 @@
 import { faArrowLeft, faChevronRight, faListUl, faTag } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Select, Tag, Upload } from "antd";
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { addProduct, getListCategory } from "../../../apis/apiCaller";
+import Footer from "../../Footer/Footer";
 import Tags from "../Tags/Tags";
 import "./AddProduct.scss";
 
@@ -13,12 +16,36 @@ const AddProduct = (props) => {
   };
   const [fileList, setFileList] = useState([]);
   const [category, setCategory] = useState("");
+  const [listCategory, setListCategory] = useState([]);
+  const [price, setPrice] = useState(0);
+  const [productName, setProductName] = useState("");
+  const [description, setDescription] = useState("");
+  const [isValid, setisValid] = useState(false);
 
-
+  useEffect(() => {
+    getListCategory()
+      .then((res) => {
+        setListCategory(res?.data);
+        console.log(category);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+  useEffect(() => {
+    if (description.length > 0 && productName.length > 0 && price > 0 && category.length > 0 && fileList.length > 0) {
+      setisValid(true);
+    } else {
+      setisValid(false);
+    }
+  }, [description.length, productName.length, price, category.length, fileList.length]);
   const onChange = ({ fileList: newFileList }) => {
+    // console.log({ newFileList });
     setFileList(newFileList);
   };
-
+  const onChangeTest = (e) => {
+    // console.log(e.target.files);
+  };
   const onPreview = async (file) => {
     let src = file.url;
     if (!src) {
@@ -34,9 +61,35 @@ const AddProduct = (props) => {
     imgWindow.document.write(image.outerHTML);
   };
 
-  function handleChange(value) {
-    console.log(`selected ${value}`);
+  function handleChangeCategory(value) {
+    setCategory(value);
   }
+  function handleChangePrice(e) {
+    setPrice(e.target.value);
+  }
+  function handleChangeName(e) {
+    setProductName(e.target.value);
+  }
+  function handleChangeDes(e) {
+    setDescription(e.target.value);
+  }
+
+  const onSubmit = () => {
+    let listImgDetail = [];
+    for (let i = 0; i < fileList.length; i++) {
+      listImgDetail.push(fileList[i].thumbUrl);
+    }
+    let categorySelected = listCategory.filter((item) => item.slug === category);
+    const data = {
+      productName,
+      listImgDetail,
+      category: { slug: categorySelected[0].slug, _id: categorySelected[0]._id, categoryName: categorySelected[0].categoryName },
+      price: parseInt(price),
+    };
+    console.log(data);
+    addProduct(data);
+  
+  };
 
   return (
     <div className="add__product__wrapper">
@@ -57,7 +110,7 @@ const AddProduct = (props) => {
           <span>0/120</span>
         </div>
         <div>
-          <input type="text" className="add__product__input" placeholder="Nhập tên sản phẩm" />
+          <input type="text" className="add__product__input" placeholder="Nhập tên sản phẩm" onChange={handleChangeName} />
         </div>
       </div>
       <div className="add__product__name">
@@ -66,7 +119,7 @@ const AddProduct = (props) => {
           <span>0/3000</span>
         </div>
         <div>
-          <input type="text" className="add__product__input" placeholder="Nhập mô tả sản phẩm" />
+          <input type="text" className="add__product__input" placeholder="Nhập mô tả sản phẩm" onChange={handleChangeDes} />
         </div>
       </div>
       <div className="add__product__info">
@@ -76,10 +129,16 @@ const AddProduct = (props) => {
             <span>Danh mục</span>
           </div>
           <div style={{ fontSize: ".9rem", color: "#db7093", opacity: 0.8, display: "flex", alignItems: "center" }}>
-            <Select style={{ width: 150, textAlign: "right" }} autoFocus={true} bordered={false} showArrow={false} onChange={handleChange}>
-              <Option value="cao-got">Giày cao gót</Option>
-              <Option value="sneaker">Giày sneaker</Option>
-              <Option value="Sandal">Giày Sandal</Option>
+            <Select style={{ width: 150, textAlign: "right" }} autoFocus={true} bordered={false} showArrow={false} onChange={handleChangeCategory}>
+              {listCategory?.map((item) => {
+                return (
+                  <>
+                    <Option value={item.slug} key={item._id}>
+                      {item.categoryName}
+                    </Option>
+                  </>
+                );
+              })}
             </Select>
             <FontAwesomeIcon style={{ fontSize: "1rem" }} icon={faChevronRight} />
           </div>
@@ -91,7 +150,7 @@ const AddProduct = (props) => {
             <span>Giá</span>
           </div>
           <div style={{ fontSize: ".9rem", color: "#db7093", opacity: 0.8 }}>
-            <input type="number" className="add__product__input" />
+            <input type="number" className="add__product__input" onChange={handleChangePrice} />
           </div>
         </div>
 
@@ -101,7 +160,7 @@ const AddProduct = (props) => {
           </div>
         </div>
         <div style={{ backgroundColor: "#fff", padding: "12px" }}>
-          <Tags/>
+          <Tags />
         </div>
 
         <div className="add__product__info__size">
@@ -110,9 +169,10 @@ const AddProduct = (props) => {
           </div>
         </div>
         <div style={{ backgroundColor: "#fff", padding: "12px" }}>
-          <Tags/>
+          <Tags />
         </div>
       </div>
+      <Footer onSubmit={onSubmit} isValid={isValid} />
     </div>
   );
 };

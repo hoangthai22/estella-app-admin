@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import AddProduct from "../components/Content/AddProduct/AddProduct";
 import Menu from "../components/Content/Menu/Menu";
 import Products from "../components/Content/Products/Products";
+import Footer from "../components/Footer/Footer";
 import Header from "../components/Header/Header";
 import ModalDisalbe from "../components/Modal/ModalDisalbe";
 import "./main.scss";

@@ -3,6 +3,7 @@
 
 .add__product__wrapper {
   font-family: "Quicksand", sans-serif !important;
+  height: calc(100vh + 80px);
 }
 .add__product {
   &__title {
@@ -27,7 +28,7 @@
     
     & > div {
       margin-top: 6px;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
     }
     & > div :last-child{
       color: rgb(150, 150, 150);
@@ -43,7 +44,7 @@
   }
   &__info {
     margin-top: 6px;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     &__category {
       background-color: #fff;
       display: flex;
@@ -71,7 +72,8 @@
   }
   &__input {
     border: transparent !important;
-    color: #000;
+    color: #000 !important;
+    font-weight: 500;
     &:focus {
       outline: transparent;
     }
@@ -81,5 +83,13 @@
 input[type="text"],
 input[type="number"],
 textarea {
-  font-size: 16px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #000 !important;
+}
+
+.ant-select{
+  color: #000 !important;
+  font-weight: 500 !important;
+  font-size: 1.1rem !important;
 }
