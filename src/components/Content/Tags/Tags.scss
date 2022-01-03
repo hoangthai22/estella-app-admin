@@ -1,0 +1,40 @@
+@import "../../../App.scss";
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600&display=swap");
+
+.site-tag-plus {
+    background: #fff !important;
+    border-style: dashed !important;
+    padding: 8px 10px !important;
+  }
+  .edit-tag {
+    user-select: none !important;
+    padding: 8px !important;
+    border-radius: 5px !important;
+    color: $primary-color !important;
+    border: 1px solid $primary-color !important;
+    margin-bottom: 10px;
+    & > span {
+      padding: 10px;
+      font-weight: 500;
+      font-size: 1rem;
+    }
+  }
+  .tags__wrapper{
+    display: flex;
+    justify-content: space-between;
+  }
+  .ant-tag-close-icon{
+    padding: 0 !important;
+  }
+  .tag-input {
+    width: 78px !important;
+    margin-right: 8px !important;
+    vertical-align: top !important;
+    padding:  6px !important; 
+    border-radius: 5px !important;
+  }
+  [data-theme="dark"] .site-tag-plus {
+    background: transparent !important;
+    border-style: dashed !important;
+  }
+  

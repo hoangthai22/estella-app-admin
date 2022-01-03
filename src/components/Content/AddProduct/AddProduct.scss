@@ -1,0 +1,85 @@
+@import "../../../App.scss";
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600&display=swap");
+
+.add__product__wrapper {
+  font-family: "Quicksand", sans-serif !important;
+}
+.add__product {
+  &__title {
+    background-color: #fff;
+    position: relative;
+    text-align: center;
+    height: 60px;
+    width: 100%;
+    font-weight: 700;
+    font-size: 1.3rem;
+    line-height: 60px;
+  }
+  &__img {
+    margin-top: 12px;
+    padding: 12px;
+    background-color: #fff;
+  }
+  &__name {
+    margin-top: 6px;
+    background-color: #fff;
+    padding: 12px;
+    
+    & > div {
+      margin-top: 6px;
+      font-size: 1.1rem;
+    }
+    & > div :last-child{
+      color: rgb(150, 150, 150);
+      font-size: 1rem;
+    }
+    & > div > span {
+      font-weight: 700;
+      color: #000;
+    }
+    & > div > input {
+      width: 100%;
+    }
+  }
+  &__info {
+    margin-top: 6px;
+    font-size: 1.1rem;
+    &__category {
+      background-color: #fff;
+      display: flex;
+      padding: 14px 12px;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgb(240, 240, 240);
+      & > div > input {
+        text-align: right;
+      }
+      & > div > span {
+        color: #000;
+        font-weight: 700;
+      }
+    }
+
+    &__size {
+      margin-top: 6px;
+      background-color: #fff;
+      color: #000;
+      font-weight: 700;
+      padding: 14px 12px;
+      border-bottom: 1px solid rgb(240, 240, 240);
+    }
+  }
+  &__input {
+    border: transparent !important;
+    color: #000;
+    &:focus {
+      outline: transparent;
+    }
+  }
+}
+
+input[type="text"],
+input[type="number"],
+textarea {
+  font-size: 16px;
+}
