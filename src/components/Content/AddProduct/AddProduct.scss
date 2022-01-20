@@ -3,7 +3,8 @@
 
 .add__product__wrapper {
   font-family: "Quicksand", sans-serif !important;
-  height: calc(100vh + 80px);
+  // height: calc(100vh + 230px);
+  padding-bottom: 90px;
 }
 .add__product {
   &__title {
@@ -25,12 +26,12 @@
     margin-top: 6px;
     background-color: #fff;
     padding: 12px;
-    
+
     & > div {
       margin-top: 6px;
       font-size: 1.2rem;
     }
-    & > div :last-child{
+    & > div :last-child {
       color: rgb(150, 150, 150);
       font-size: 1rem;
     }
@@ -88,8 +89,12 @@ textarea {
   color: #000 !important;
 }
 
-.ant-select{
+.ant-select {
   color: #000 !important;
   font-weight: 500 !important;
   font-size: 1.1rem !important;
+}
+
+.ant-upload-list-item {
+  border: 1px solid rgb(150, 150, 150) !important;
 }

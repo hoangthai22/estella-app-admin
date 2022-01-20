@@ -1,9 +1,8 @@
+import 'antd/dist/antd.css';
 import { Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.scss";
-import ModalDisalbe from "./components/Modal/ModalDisalbe";
 import HomePage from "./pages/HomePage";
-import 'antd/dist/antd.css'; 
 
 function App() {
   return (

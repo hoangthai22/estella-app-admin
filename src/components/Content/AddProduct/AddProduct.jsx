@@ -1,8 +1,7 @@
 import { faArrowLeft, faChevronRight, faListUl, faTag } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Select, Tag, Upload } from "antd";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { Select, Upload } from "antd";
+import React, { useEffect, useRef, useState } from "react";
 import { addProduct, getListCategory } from "../../../apis/apiCaller";
 import Footer from "../../Footer/Footer";
 import Tags from "../Tags/Tags";
@@ -21,31 +20,34 @@ const AddProduct = (props) => {
   const [productName, setProductName] = useState("");
   const [description, setDescription] = useState("");
   const [isValid, setisValid] = useState(false);
+  const [color, setColor] = useState({});
+  const [size, setSize] = useState([]);
+  const inputPrice = useRef();
+
+  const [imageUrl, setImageUrl] = useState("");
 
   useEffect(() => {
     getListCategory()
       .then((res) => {
         setListCategory(res?.data);
-        console.log(category);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
   useEffect(() => {
-    if (description.length > 0 && productName.length > 0 && price > 0 && category.length > 0 && fileList.length > 0) {
+    console.log({ color });
+    console.log({ size });
+    if (color.tags.length > 0 && color.imgSrc.length > 0 && size.length > 0 && description.length > 0 && productName.length > 0 && price > 0 && category.length > 0 && fileList.length > 0) {
       setisValid(true);
     } else {
       setisValid(false);
     }
-  }, [description.length, productName.length, price, category.length, fileList.length]);
+  }, [description.length, productName.length, price, category.length, fileList.length, color.tags, color.imgSrc, size, color]);
   const onChange = ({ fileList: newFileList }) => {
-    // console.log({ newFileList });
     setFileList(newFileList);
   };
-  const onChangeTest = (e) => {
-    // console.log(e.target.files);
-  };
+
   const onPreview = async (file) => {
     let src = file.url;
     if (!src) {
@@ -75,20 +77,39 @@ const AddProduct = (props) => {
   }
 
   const onSubmit = () => {
+    console.log({ size });
     let listImgDetail = [];
     for (let i = 0; i < fileList.length; i++) {
       listImgDetail.push(fileList[i].thumbUrl);
     }
     let categorySelected = listCategory.filter((item) => item.slug === category);
+    let listColor = [];
+    console.log({ color });
+    color?.tags?.map((item, ind) => {
+      listColor = [
+        ...listColor,
+        {
+          color: item,
+          imgTitle: color?.imgSrc[ind],
+          listSize: size.map((i) => {
+            return {
+              sizeName: i,
+              quantity: 100,
+            };
+          }),
+        },
+      ];
+    });
     const data = {
       productName,
+      productDescription: description,
       listImgDetail,
       category: { slug: categorySelected[0].slug, _id: categorySelected[0]._id, categoryName: categorySelected[0].categoryName },
       price: parseInt(price),
+      size: listColor,
     };
     console.log(data);
     addProduct(data);
-  
   };
 
   return (
@@ -144,13 +165,13 @@ const AddProduct = (props) => {
           </div>
         </div>
 
-        <div className="add__product__info__category">
+        <div className="add__product__info__category" onClick={() => inputPrice.current.focus()}>
           <div style={{ display: "flex", alignItems: "center" }}>
             <FontAwesomeIcon className="menu__icon" icon={faTag} />
             <span>Giá</span>
           </div>
           <div style={{ fontSize: ".9rem", color: "#db7093", opacity: 0.8 }}>
-            <input type="number" className="add__product__input" onChange={handleChangePrice} />
+            <input ref={inputPrice} type="number" className="add__product__input" onChange={handleChangePrice} />
           </div>
         </div>
 
@@ -159,17 +180,16 @@ const AddProduct = (props) => {
             <span>Màu sắc</span>
           </div>
         </div>
-        <div style={{ backgroundColor: "#fff", padding: "12px" }}>
-          <Tags />
+        <div style={{ backgroundColor: "#fff", padding: "0 12px 12px" }}>
+          <Tags callbackFunc={(color) => setColor(color)} mode={"Color"} />
         </div>
-
         <div className="add__product__info__size">
           <div style={{ display: "flex", alignItems: "center" }}>
             <span>Kích cỡ</span>
           </div>
         </div>
         <div style={{ backgroundColor: "#fff", padding: "12px" }}>
-          <Tags />
+          <Tags callbackFunc={(size) => setSize(size)} mode={"Size"} />
         </div>
       </div>
       <Footer onSubmit={onSubmit} isValid={isValid} />
